@@ -1,7 +1,7 @@
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List
 from starlette.graphql import GraphQLApp
 from schemas import TestType
-from .api import es
+from .elasticsearch import es
 
 class TestQuery(ObjectType):
     test_list = None

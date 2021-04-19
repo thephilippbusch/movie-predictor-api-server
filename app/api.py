@@ -1,11 +1,9 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List
 from graphql.execution.executors.asyncio import AsyncioExecutor
 from starlette.graphql import GraphQLApp
 from schemas import MovieType
-from elasticsearch import Elasticsearch
 
 from .movies import MovieQuery, MovieMutation
 from .people import PeopleQuery, PersonMutations
@@ -15,14 +13,9 @@ from .test import TestQuery, TestMutation
 
 app = FastAPI()
 
-es_host = os.environ.get('BONSAI_URL')
-
-if es_host:
-    es = Elasticsearch([es_host])
-else:
-    es = Elasticsearch()
-
 origins=[
+    'moviestar-dashboard.herokuapp.com',
+    'https://moviestar-dashboard.herokuapp.com',
     'localhost:3000',
     'http://localhost:3000'
 ]

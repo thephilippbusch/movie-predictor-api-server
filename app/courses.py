@@ -1,7 +1,7 @@
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import CourseType
-from .api import es
+from .elasticsearch import es
 
 class CourseQuery(ObjectType):
     course_list = None

@@ -2,7 +2,7 @@ import uuid
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import CalculationType
-from .api import es
+from .elasticsearch import es
 
 class CalculationQuery(ObjectType):
     calculation_list = None

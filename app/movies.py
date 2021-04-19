@@ -2,7 +2,7 @@ import requests, os
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import MovieType, GenreType, GenreInputType, CompanyType, CompanyInputType
-from .api import es
+from .elasticsearch import es
 
 api_config = os.environ.get('TWITTER_API_TOKEN')
 
