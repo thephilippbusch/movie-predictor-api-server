@@ -1,16 +1,16 @@
 import requests
-from dotenv import dotenv_values
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import MovieType, GenreType, GenreInputType, CompanyType, CompanyInputType
 from elasticsearch import Elasticsearch
+from boto.s3.connection import S3Connection
 
 es = Elasticsearch()
 
-api_config = dotenv_values('.env')
+api_config = S3Connection(os.environ['TWITTER_API_TOKEN'])
 
 twitter_auth_header = {
-    "authorization": f"Bearer {api_config['TWITTER_API_TOKEN']}"
+    "authorization": f"Bearer {api_config}"
 }
 
 class MovieQuery(ObjectType):
