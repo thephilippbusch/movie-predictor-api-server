@@ -1,7 +1,7 @@
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import CompanyType
-from app.api import es
+from .api import es
 
 class CompanyQuery(ObjectType):
     company_list = None
