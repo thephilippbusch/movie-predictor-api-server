@@ -62,4 +62,5 @@ class CalculationType(ObjectType):
     acting = List(Int)
     directing = Int()
     companies = Int()
+    factor = Float()
     calculated_revenue = Float()

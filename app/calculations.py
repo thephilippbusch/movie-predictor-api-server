@@ -200,6 +200,7 @@ class CreateCalculation(Mutation):
             "acting": acting,
             "directing": directing,
             "companies": companies,
+            "factor": final_factor,
             "calculated_revenue": revenue
         }
 
