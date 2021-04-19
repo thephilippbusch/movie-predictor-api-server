@@ -3,13 +3,13 @@ from fastapi.middleware.cors import CORSMiddleware
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List
 from graphql.execution.executors.asyncio import AsyncioExecutor
 from starlette.graphql import GraphQLApp
-from schemas import CourseType, MovieType
+from schemas import MovieType
 from elasticsearch import Elasticsearch
 
 from .movies import MovieQuery, MovieMutation
 from .people import PeopleQuery, PersonMutations
-from .courses import CourseQuery, CourseMutation, CheckCourses
 from .companies import CompanyQuery, CompanyMutation, CheckCompany
+from .calculations import CalculationQuery, CalculationMutation
 from .test import TestQuery, TestMutation
 
 app = FastAPI()
@@ -27,18 +27,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_route("/courses", GraphQLApp(
-    schema=Schema(query=CourseQuery, mutation=CourseMutation),
-    executor_class=AsyncioExecutor
-))
-
-app.add_route("/check-courses", GraphQLApp(
-    schema=Schema(query=CheckCourses),
-    executor_class=AsyncioExecutor
-))
 
 app.add_route("/movies", GraphQLApp(
     schema=Schema(query=MovieQuery, mutation=MovieMutation),
+    executor_class=AsyncioExecutor
+))
+
+# app.add_route("/genres", GraphQLApp(
+#     schema=Schema(query=GenreQuery, mutation=GenreMutation),
+#     executor_class=AsyncioExecutor
+# ))
+
+app.add_route("/calculations", GraphQLApp(
+    schema=Schema(query=CalculationQuery, mutation=CalculationMutation),
     executor_class=AsyncioExecutor
 ))
 
