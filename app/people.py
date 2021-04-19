@@ -1,9 +1,7 @@
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import PersonType
-from elasticsearch import Elasticsearch
-
-es = Elasticsearch()
+from app.api import es
 
 class PeopleQuery(ObjectType):
     people_list = None

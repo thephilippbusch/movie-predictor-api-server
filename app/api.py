@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List
@@ -13,6 +14,13 @@ from .calculations import CalculationQuery, CalculationMutation
 from .test import TestQuery, TestMutation
 
 app = FastAPI()
+
+es_host = os.environ.get('BONSAI_URL')
+
+if es_host:
+    es = Elasticsearch([es_host])
+else:
+    es = Elasticsearch()
 
 origins=[
     'localhost:3000',
