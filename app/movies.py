@@ -6,7 +6,7 @@ from elasticsearch import Elasticsearch
 
 es = Elasticsearch()
 
-api_config = os.environ.get['TWITTER_API_TOKEN']
+api_config = os.environ.get('TWITTER_API_TOKEN')
 
 twitter_auth_header = {
     "authorization": f"Bearer {api_config}"
