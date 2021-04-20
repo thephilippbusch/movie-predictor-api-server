@@ -9,7 +9,6 @@ from .movies import MovieQuery, MovieMutation
 from .people import PeopleQuery, PersonMutations
 from .companies import CompanyQuery, CompanyMutation, CheckCompany
 from .calculations import CalculationQuery, CalculationMutation
-from .test import TestQuery, TestMutation
 
 app = FastAPI()
 
@@ -51,10 +50,5 @@ app.add_route("/people", GraphQLApp(
 
 app.add_route("/companies", GraphQLApp(
     schema=Schema(query=CompanyQuery, mutation=CompanyMutation),
-    executor_class=AsyncioExecutor
-))
-
-app.add_route("/test", GraphQLApp(
-    schema=Schema(query=TestQuery, mutation=TestMutation),
     executor_class=AsyncioExecutor
 ))
