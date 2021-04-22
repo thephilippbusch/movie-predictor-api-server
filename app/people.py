@@ -188,6 +188,7 @@ class UpdateMovieList(Mutation):
                 }
             }
         )
+        print(id_res)
 
         es_id = id_res['hits']['hits'][0]["_id"]
 
