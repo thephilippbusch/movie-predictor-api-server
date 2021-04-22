@@ -178,27 +178,34 @@ class UpdateMovieList(Mutation):
     async def mutate(self, info, id, popular_movies):
         ok = False
 
-        res = es.update_by_query(
+        id_res = es.search(
             index='people',
             body={
-                "script": {
-                    "source": "ctx._source.popular_movies = params.popular_movies",
-                    "lang": "painless",
-                    "params": {
-                    "popular_movies": popular_movies
-                    }
-                },
                 "query": {
                     "match": {
-                    "id": id
+                        "id": id
                     }
                 }
             }
         )
 
-        if res["deleted"] == 0:
-            ok = False
-        if res["deleted"] == 1:
+        es_id = id_res['hits']['hits'][0]["_id"]
+
+        res = es.update(
+            index='people',
+            id=es_id,
+            body={
+                "script": {
+                    "source": "ctx._source.popular_movies = params.popular_movies",
+                    "lang": "painless",
+                    "params": {
+                        "popular_movies": popular_movies
+                    }
+                }
+            }
+        )
+
+        if res["result"] == "updated":
             ok = True
         
         return UpdateMovieList(ok)
