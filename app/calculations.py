@@ -125,7 +125,8 @@ class CreateCalculation(Mutation):
                     if movie["twitter_follower"]:
                         twitter_numbers.append(movie["twitter_follower"])
 
-            all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
+            if len(movie_factors) > 0:
+                all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
 
 
         for person in directing:
@@ -163,7 +164,8 @@ class CreateCalculation(Mutation):
                     if movie["twitter_follower"]:
                         twitter_numbers.append(movie["twitter_follower"])
 
-            all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
+            if len(movie_factors) > 0:
+                all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
 
         for company in companies:
             movie_factors = []
@@ -183,8 +185,8 @@ class CreateCalculation(Mutation):
                 movie = detail['_source']
                 if not movie["budget"] == 0 and not movie["revenue"] == 0:
                     movie_factors.append(round(movie["revenue"]/movie["budget"], 2))
-
-            all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
+            if len(movie_factors) > 0:
+                all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
 
         twitter_follower_avg = round(sum(twitter_numbers) / len(twitter_numbers), 2)
         twitter_factors = []
