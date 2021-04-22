@@ -5,7 +5,7 @@ from .elasticsearch import es
 
 class PeopleQuery(ObjectType):
     people_list = None
-    get_people = Field(List(PersonType), id=String(), name=String(), knownForDep=String(), imdb_id=String(), gender=Int())
+    get_people = Field(List(PersonType), id=Int(), name=String(), knownForDep=String(), imdb_id=String(), gender=Int())
     async def resolve_get_people(self, info, id=None, name=None, knownForDep=None, imdb_id=None, gender=None):
         people_list = []
         query_args = []
@@ -188,7 +188,6 @@ class UpdateMovieList(Mutation):
                 }
             }
         )
-        print(id_res)
 
         es_id = id_res['hits']['hits'][0]["_id"]
 
