@@ -1,13 +1,18 @@
 import requests, os
+from dotenv import dotenv_values
 from graphene import ObjectType, List, String, Schema, Field, Mutation, Int, Float, List, Boolean
 from starlette.graphql import GraphQLApp
 from schemas import MovieType, GenreType, GenreInputType, CompanyType, CompanyInputType
 from .elasticsearch import es
 
-api_config = os.environ.get('TWITTER_API_TOKEN')
+if os.environ.get("TWITTER_API_TOKEN"):
+    token = os.environ.get("TWITTER_API_TOKEN")
+else:
+    config = dotenv_values(".env")
+    token = config["TWITTER_API_TOKEN"]
 
 twitter_auth_header = {
-    "authorization": f"Bearer {api_config}"
+    "authorization": f"Bearer {token}"
 }
 
 class MovieQuery(ObjectType):
@@ -34,7 +39,7 @@ class MovieQuery(ObjectType):
             res = es.search(
                 index="movies",
                 body={
-                    "size": 50,
+                    "size": 1000,
                     "query": {
                         "bool": {
                             "must": query_args
@@ -48,7 +53,7 @@ class MovieQuery(ObjectType):
             res = es.search(
                 index="movies",
                 body={
-                    "size": 50,
+                    "size": 1000,
                     "query": {
                         "match_all": {}
                     }
@@ -109,6 +114,8 @@ class AddMovie(Mutation):
         if twitter_id:
             response = requests.get(f'https://api.twitter.com/1.1/users/show.json?screen_name={twitter_id}', headers=twitter_auth_header)
             account = response.json()
+            print(f"{twitter_id}:")
+            print(account)
             if not "error" in account:
                 twitter_follower = account["followers_count"]
         

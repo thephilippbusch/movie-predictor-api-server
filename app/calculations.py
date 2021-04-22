@@ -78,13 +78,14 @@ class CreateCalculation(Mutation):
         creation_date = String(required=True)
         used_budget = Float(required=True)
         acting = List(Int)
-        directing = Int()
-        companies = Int()
+        directing = List(Int)
+        companies = List(Int)
 
     async def mutate(self, info, creation_date, used_budget, acting=None, directing=None, companies=None):
         revenue = None
         all_factors = []
         twitter_numbers = []
+        all_movies_list = []
 
         def avg(number_list) -> float:
             return round(sum(number_list) / len(number_list), 2)
@@ -104,6 +105,7 @@ class CreateCalculation(Mutation):
             )
             hit = people_details['hits']['hits'][0]['_source']
             for movie in hit['popular_movies']:
+                all_movies_list.append(movie)
                 movie_details = es.search(
                     index="movies",
                     body={
@@ -114,7 +116,6 @@ class CreateCalculation(Mutation):
                         }
                     }
                 )
-                print(movie_details)
                 movie = movie_details['hits']['hits'][0]['_source']
 
                 if not movie["budget"] == 0 and not movie["revenue"] == 0:
@@ -127,20 +128,22 @@ class CreateCalculation(Mutation):
             all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
 
 
-        if directing:
+        for person in directing:
             movie_factors = []
+
             directing_details = es.search(
                 index="people",
                 body={
                     "query": {
                         "match": {
-                            "id": directing
+                            "id": person
                         }
                     }
                 }
             )
             hit = directing_details['hits']['hits'][0]['_source']
             for movie in hit['popular_movies']:
+                all_movies_list.append(movie)
                 movie_details = es.search(
                     index="movies",
                     body={
@@ -162,19 +165,21 @@ class CreateCalculation(Mutation):
 
             all_factors.append(round(sum(movie_factors) / len(movie_factors), 2))
 
-        if companies:
+        for company in companies:
             movie_factors = []
+
             movies = es.search(
                 index="movies",
                 body={
                     "query": {
                         "match": {
-                            "production_companies.id": companies
+                            "production_companies.id": company
                         }
                     }
                 }
             )
             for detail in movies['hits']['hits']:
+                all_movies_list.append(movie["id"])
                 movie = detail['_source']
                 if not movie["budget"] == 0 and not movie["revenue"] == 0:
                     movie_factors.append(round(movie["revenue"]/movie["budget"], 2))
@@ -199,6 +204,7 @@ class CreateCalculation(Mutation):
             "acting": acting,
             "directing": directing,
             "companies": companies,
+            "movies": all_movies_list,
             "factor": final_factor,
             "calculated_revenue": revenue
         }
@@ -207,7 +213,6 @@ class CreateCalculation(Mutation):
             index="calculations",
             body=new_calculation
         )
-        print(res)
 
         return CreateCalculation(new_calculation)
 

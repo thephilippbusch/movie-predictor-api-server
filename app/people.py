@@ -24,7 +24,7 @@ class PeopleQuery(ObjectType):
             res = es.search(
                 index="people",
                 body={
-                    "size": 50,
+                    "size": 1000,
                     "query": {
                         "bool": {
                             "must": query_args
@@ -38,7 +38,7 @@ class PeopleQuery(ObjectType):
             res = es.search(
                 index="people",
                 body={
-                    "size": 50,
+                    "size": 1000,
                     "query": {
                         "match_all": {}
                     }

@@ -8,27 +8,38 @@ class CompanyQuery(ObjectType):
     get_companies = Field(List(CompanyType), id=String(), name=String())
     async def resolve_get_companies(self, info, id=None, name=None):
         company_list = []
-        res = es.search(
-            index="companies", 
-            body={
-                "query": {
-                    "match_all": {}
+
+        if id:
+            query_args.append({"match": {"id": id}})
+        if name:
+            query_args.append({"match": {"name": name}})
+        
+        if id or name:
+            res = es.search(
+                index="companies",
+                body={
+                    "size": 1000,
+                    "query": {
+                        "bool": {
+                            "must": query_args
+                        }
+                    }
                 }
-            }
-        )
-        for hit in res['hits']['hits']:
-            company_list.append(hit['_source'])
-
-        if(id):
-            for company in company_list:
-                if company['id'] == id: return [company]
-
-        if(name):
-            filtered_company_list = []
-            for company in company_list:
-                if name in company['name']:
-                    filtered_company_list.append(company)
-            return filtered_company_list
+            )
+            for hit in res['hits']['hits']:
+                company_list.append(hit['_source'])
+        else:
+            res = es.search(
+                index="companies",
+                body={
+                    "size": 1000,
+                    "query": {
+                        "match_all": {}
+                    }
+                }
+            )
+            for hit in res['hits']['hits']:
+                company_list.append(hit['_source'])
 
         return company_list
 
