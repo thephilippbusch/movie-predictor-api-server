@@ -114,7 +114,7 @@ class AddMovie(Mutation):
         if twitter_id:
             response = requests.get(f'https://api.twitter.com/1.1/users/show.json?screen_name={twitter_id}', headers=twitter_auth_header)
             account = response.json()
-            if not "error" in account:
+            if "followers_count" in account:
                 twitter_follower = account["followers_count"]
         
         new_movie = {
