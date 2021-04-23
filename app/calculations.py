@@ -106,6 +106,7 @@ class CreateCalculation(Mutation):
             hit = people_details['hits']['hits'][0]['_source']
             for movie in hit['popular_movies']:
                 all_movies_list.append(movie)
+                print(movie)
                 movie_details = es.search(
                     index="movies",
                     body={
@@ -116,6 +117,7 @@ class CreateCalculation(Mutation):
                         }
                     }
                 )
+                print(movie_details)
                 movie = movie_details['hits']['hits'][0]['_source']
 
                 if not movie["budget"] == 0 and not movie["revenue"] == 0:
