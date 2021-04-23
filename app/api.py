@@ -38,15 +38,18 @@ app.add_route("/movies", GraphQLApp(
 #     executor_class=AsyncioExecutor
 # ))
 
+
 app.add_route("/calculations", GraphQLApp(
     schema=Schema(query=CalculationQuery, mutation=CalculationMutation),
     executor_class=AsyncioExecutor
 ))
 
+
 app.add_route("/people", GraphQLApp(
     schema=Schema(query=PeopleQuery, mutation=PersonMutations),
     executor_class=AsyncioExecutor
 ))
+
 
 app.add_route("/companies", GraphQLApp(
     schema=Schema(query=CompanyQuery, mutation=CompanyMutation),
